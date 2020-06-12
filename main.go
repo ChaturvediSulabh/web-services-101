@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -48,12 +49,30 @@ func main() {
 func toppingHandler(toppings []Topping) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
-		case "GET":
-			topping, err := json.Marshal(toppings)
+		case "POST":
+			data, err := ioutil.ReadAll(r.Body)
 			if err != nil {
+				log.Println(err)
 				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
+			var t Topping
+			err = json.Unmarshal(data, &t)
+			if err != nil {
+				log.Println(err)
+				w.WriteHeader(http.StatusBadRequest)
+				return
+			}
+			fmt.Printf("Data received:\n%+v", t)
+			w.WriteHeader(http.StatusCreated)
+		default:
+			topping, err := json.Marshal(toppings)
+			if err != nil {
+				log.Println(err)
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			w.WriteHeader(http.StatusOK)
 			w.Header().Set("Content-Type", "application/json")
 			w.Write(topping)
 		}

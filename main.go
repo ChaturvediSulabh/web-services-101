@@ -17,19 +17,7 @@ type Sample []struct {
 	Type    string  `json:"type"`
 	Name    string  `json:"name"`
 	Ppu     float64 `json:"ppu"`
-	Batters Batters `json:"batters"`
 	Topping Topping `json:"topping"`
-}
-
-//Batters ...
-type Batters struct {
-	Batter `json:"batter"`
-}
-
-//Batter ...
-type Batter []struct {
-	ID   string `json:"id"`
-	Type string `json:"type"`
 }
 
 //Topping ...

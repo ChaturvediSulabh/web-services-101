@@ -1,10 +1,4 @@
-package main
-
-import (
-	"log"
-	"net/http"
-	"web-services-101/topping"
-)
+package topping
 
 //Sample ...
 type Sample []struct {
@@ -25,13 +19,4 @@ type Topping []struct {
 type ToppingResponse struct {
 	Name string
 	Cost float64
-}
-
-func main() {
-	const apibasePath = "/api"
-	topping.SetupRoutes(apibasePath)
-	err := http.ListenAndServe(":5000", nil)
-	if err != nil {
-		log.Fatal(err)
-	}
 }

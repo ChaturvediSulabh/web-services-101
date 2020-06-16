@@ -16,113 +16,25 @@ func SetupDB() *sql.DB {
 		log.Fatal(err)
 	}
 	defer DbConn.Close()
-	prepareDB(DbConn)
+	// prepareDB(DbConn)
 	return DbConn
 }
 
-func prepareDB(DbConn *sql.DB) {
-	// createTableSQLStmt := `
-	// CREATE TABLE menu (
-	// 	id SERIAL PRIMARY KEY,
-	// 	item JSON NOT NULL
-	// )
-	// `
-	insertDataSQLStmt := `
-	INSERT INTO "public"."menu"
-	(item)
-	values
-	('{
-			"id": "0001",
-			"type": "donut",
-			"name": "Cake",
-			"ppu": 0.55,
-			"topping": [
-				{
-					"id": "5001",
-					"type": "None"
-				},
-				{
-					"id": "5002",
-					"type": "Glazed"
-				},
-				{
-					"id": "5005",
-					"type": "Sugar"
-				},
-				{
-					"id": "5007",
-					"type": "Powdered Sugar"
-				},
-				{
-					"id": "5006",
-					"type": "Chocolate with Sprinkles"
-				},
-				{
-					"id": "5003",
-					"type": "Chocolate"
-				},
-				{
-					"id": "5004",
-					"type": "Maple"
-				}
-			]
-		}'),
-		('{
-			"id": "0002",
-			"type": "donut",
-			"name": "Raised",
-			"ppu": 0.55,
-			"topping": [
-				{
-					"id": "5001",
-					"type": "None"
-				},
-				{
-					"id": "5002",
-					"type": "Glazed"
-				},
-				{
-					"id": "5005",
-					"type": "Sugar"
-				},
-				{
-					"id": "5003",
-					"type": "Chocolate"
-				},
-				{
-					"id": "5004",
-					"type": "Maple"
-				}
-			]
-		}'),
-		('{
-			"id": "0003",
-			"type": "donut",
-			"name": "Old Fashioned",
-			"ppu": 0.55,
-			"topping": [
-				{
-					"id": "5001",
-					"type": "None"
-				},
-				{
-					"id": "5002",
-					"type": "Glazed"
-				},
-				{
-					"id": "5003",
-					"type": "Chocolate"
-				},
-				{
-					"id": "5004",
-					"type": "Maple"
-				}
-			]
-		}')'
-	`
-	res, err := DbConn.Exec(insertDataSQLStmt)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println(res)
-}
+// func prepareDB(DbConn *sql.DB) {
+// 	insertDataSQLStmt := `SELECT * FROM "public"."menu" LIMIT 100`
+// 	rows, err := DbConn.Query(insertDataSQLStmt)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	defer rows.Close()
+
+// 	for rows.Next() {
+// 		var id int
+// 		var item string
+// 		err := rows.Scan(&id, &item)
+// 		if err != nil {
+// 			log.Panic(err)
+// 		}
+// 		log.Println(id, item)
+// 	}
+// }

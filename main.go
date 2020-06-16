@@ -3,7 +3,10 @@ package main
 import (
 	"log"
 	"net/http"
+	"web-services-101/database"
 	"web-services-101/topping"
+
+	_ "github.com/lib/pq"
 )
 
 //Sample ...
@@ -28,6 +31,7 @@ type ToppingResponse struct {
 }
 
 func main() {
+	database.SetupDB()
 	const apibasePath = "/api"
 	topping.SetupRoutes(apibasePath)
 	err := http.ListenAndServe(":5000", nil)

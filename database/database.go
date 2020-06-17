@@ -15,26 +15,24 @@ func SetupDB() *sql.DB {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer DbConn.Close()
-	// prepareDB(DbConn)
 	return DbConn
 }
 
-// func prepareDB(DbConn *sql.DB) {
-// 	insertDataSQLStmt := `SELECT * FROM "public"."menu" LIMIT 100`
-// 	rows, err := DbConn.Query(insertDataSQLStmt)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	defer rows.Close()
-
-// 	for rows.Next() {
-// 		var id int
-// 		var item string
-// 		err := rows.Scan(&id, &item)
-// 		if err != nil {
-// 			log.Panic(err)
-// 		}
-// 		log.Println(id, item)
-// 	}
-// }
+//GetAllData ...
+func GetAllData(DbConn *sql.DB) (string, error) {
+	query := `SELECT * FROM "public"."menu" LIMIT 100`
+	rows, err := DbConn.Query(query)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+	var item string
+	for rows.Next() {
+		var id int
+		err := rows.Scan(&id, &item)
+		if err != nil {
+			log.Panic(err)
+		}
+	}
+	return item, nil
+}

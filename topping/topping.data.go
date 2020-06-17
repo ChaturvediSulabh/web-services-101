@@ -3,22 +3,17 @@ package topping
 import (
 	"encoding/json"
 	"errors"
-	"io/ioutil"
 	"log"
-	"os"
+	"web-services-101/database"
 )
 
-func getToppings(fileName string) ([]Topping, error) {
-	_, err := os.Stat(fileName)
-	if err != nil {
-		return nil, err
-	}
-	data, err := ioutil.ReadFile(fileName)
+func getToppings() ([]Topping, error) {
+	data, err := database.GetAllData(database.SetupDB())
 	if err != nil {
 		return nil, err
 	}
 	var s Sample
-	err = json.Unmarshal(data, &s)
+	err = json.Unmarshal([]byte(data), &s)
 	if err != nil {
 		return nil, err
 	}
@@ -26,16 +21,17 @@ func getToppings(fileName string) ([]Topping, error) {
 	for i := 0; i < len(s); i++ {
 		toppings = append(toppings, s[i].Topping)
 	}
+	log.Println(toppings)
 	return toppings, nil
 }
 
-func getToppingByName(fileName, toppingType string) ([]ToppingResponse, error) {
-	var s Sample
-	data, err := ioutil.ReadFile(fileName)
+func getToppingByName(toppingType string) ([]ToppingResponse, error) {
+	data, err := database.GetAllData(database.SetupDB())
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	err = json.Unmarshal(data, &s)
+	var s Sample
+	err = json.Unmarshal([]byte(data), &s)
 	if err != nil {
 		return nil, err
 	}

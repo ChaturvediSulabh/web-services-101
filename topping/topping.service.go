@@ -2,36 +2,33 @@ package topping
 
 import (
 	"encoding/json"
-	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
 	"web-services-101/cors"
+	"web-services-101/database"
 )
 
 //SetupRoutes ...
 func SetupRoutes(apiBasePath string) {
-	var fileName *string = flag.String("dataFile", "data/sample.json", "JSON file with sample data")
-	flag.Parse()
-	toppings, err := getToppings(*fileName)
+	toppings, err := getToppings()
 	if err != nil {
 		return
 	}
-	toppingByNameHandler := http.HandlerFunc(toppingHandler(*fileName))
+	toppingByNameHandler := http.HandlerFunc(toppingHandler())
 	toppingListHandler := http.HandlerFunc(toppingsHandler(toppings))
 	http.Handle(fmt.Sprintf("%s%s", apiBasePath, "/topping/"), cors.Middleware(toppingByNameHandler))
 	http.Handle(fmt.Sprintf("%s%s", apiBasePath, "/toppings"), cors.Middleware(toppingListHandler))
 }
 
-func toppingHandler(data string) func(http.ResponseWriter, *http.Request) {
+func toppingHandler() func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println("HERE")
 		urlPathSegments := strings.Split(r.URL.Path, "/")
 		toppingType := urlPathSegments[len(urlPathSegments)-1]
 		log.Println(urlPathSegments, toppingType)
-		myTopping, err := getToppingByName(data, toppingType)
+		myTopping, err := getToppingByName(toppingType)
 		if err != nil {
 			log.Println(err)
 			w.WriteHeader(http.StatusNotFound)
@@ -57,14 +54,19 @@ func toppingsHandler(toppings []Topping) func(http.ResponseWriter, *http.Request
 				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
-			var t Topping
-			err = json.Unmarshal(data, &t)
+			var s Sample
+			err = json.Unmarshal(data, &s)
 			if err != nil {
 				log.Println(err)
 				w.WriteHeader(http.StatusBadRequest)
 				return
 			}
-			fmt.Printf("Data received:\n%+v", t)
+			fmt.Printf("Data received:\n%+v", s)
+			insertSQLStmt := `
+				INSERT INTO "public"."menu"
+				(item)
+				VALUES ` + fmt.Sprintf("%+v", s)
+			_, err = database.DbConn.Query(insertSQLStmt)
 			w.WriteHeader(http.StatusCreated)
 		default:
 			topping, err := json.Marshal(toppings)

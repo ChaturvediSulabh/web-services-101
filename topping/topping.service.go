@@ -1,12 +1,14 @@
 package topping
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
+	"time"
 	"web-services-101/cors"
 	"web-services-101/database"
 )
@@ -53,8 +55,10 @@ func toppingsHandler(toppings []Topping) func(http.ResponseWriter, *http.Request
 				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
+			ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+			defer cancel()
 			insertSQLStmt := `INSERT INTO "public"."menu" (item) VALUES ($1)`
-			_, err = database.SetupDB().Exec(insertSQLStmt, string(data))
+			_, err = database.SetupDB().ExecContext(ctx, insertSQLStmt, string(data))
 			if err != nil {
 				log.Panic(err)
 			}

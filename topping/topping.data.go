@@ -3,17 +3,25 @@ package topping
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"web-services-101/database"
 )
 
-func getToppings() ([]Topping, error) {
-	data, err := database.GetAllData(database.SetupDB())
-	if err != nil {
-		return nil, err
+func fetchMenu() ([]Sample, error) {
+	rows := database.GetAllData(database.SetupDB())
+	var s []Sample
+	for _, data := range rows {
+		var d Sample
+		err := json.Unmarshal([]byte(data), &d)
+		if err != nil {
+			return nil, err
+		}
+		s = append(s, d)
 	}
-	var s Sample
-	err = json.Unmarshal([]byte(data), &s)
+	return s, nil
+}
+
+func getToppings() ([]Topping, error) {
+	s, err := fetchMenu()
 	if err != nil {
 		return nil, err
 	}
@@ -21,17 +29,11 @@ func getToppings() ([]Topping, error) {
 	for i := 0; i < len(s); i++ {
 		toppings = append(toppings, s[i].Topping)
 	}
-	log.Println(toppings)
 	return toppings, nil
 }
 
 func getToppingByName(toppingType string) ([]ToppingResponse, error) {
-	data, err := database.GetAllData(database.SetupDB())
-	if err != nil {
-		return nil, err
-	}
-	var s Sample
-	err = json.Unmarshal([]byte(data), &s)
+	s, err := fetchMenu()
 	if err != nil {
 		return nil, err
 	}

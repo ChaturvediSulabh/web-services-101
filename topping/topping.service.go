@@ -15,7 +15,7 @@ import (
 func SetupRoutes(apiBasePath string) {
 	toppings, err := getToppings()
 	if err != nil {
-		return
+		log.Fatal(err)
 	}
 	toppingByNameHandler := http.HandlerFunc(toppingHandler())
 	toppingListHandler := http.HandlerFunc(toppingsHandler(toppings))
@@ -27,7 +27,6 @@ func toppingHandler() func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		urlPathSegments := strings.Split(r.URL.Path, "/")
 		toppingType := urlPathSegments[len(urlPathSegments)-1]
-		log.Println(urlPathSegments, toppingType)
 		myTopping, err := getToppingByName(toppingType)
 		if err != nil {
 			log.Println(err)
@@ -61,7 +60,6 @@ func toppingsHandler(toppings []Topping) func(http.ResponseWriter, *http.Request
 				w.WriteHeader(http.StatusBadRequest)
 				return
 			}
-			fmt.Printf("Data received:\n%+v", s)
 			insertSQLStmt := `
 				INSERT INTO "public"."menu"
 				(item)

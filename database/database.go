@@ -19,20 +19,21 @@ func SetupDB() *sql.DB {
 }
 
 //GetAllData ...
-func GetAllData(DbConn *sql.DB) (string, error) {
-	query := `SELECT * FROM "public"."menu" LIMIT 100`
+func GetAllData(DbConn *sql.DB) []string {
+	query := `SELECT item FROM "public"."menu"`
 	rows, err := DbConn.Query(query)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer rows.Close()
-	var item string
+	var result []string
 	for rows.Next() {
-		var id int
-		err := rows.Scan(&id, &item)
+		var item string
+		err := rows.Scan(&item)
 		if err != nil {
-			log.Panic(err)
+			log.Fatal(err)
 		}
+		result = append(result, item)
 	}
-	return item, nil
+	return result
 }

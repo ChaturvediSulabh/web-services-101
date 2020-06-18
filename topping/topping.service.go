@@ -53,18 +53,11 @@ func toppingsHandler(toppings []Topping) func(http.ResponseWriter, *http.Request
 				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
-			var s Sample
-			err = json.Unmarshal(data, &s)
+			insertSQLStmt := `INSERT INTO "public"."menu" (item) VALUES ($1)`
+			_, err = database.SetupDB().Exec(insertSQLStmt, string(data))
 			if err != nil {
-				log.Println(err)
-				w.WriteHeader(http.StatusBadRequest)
-				return
+				log.Panic(err)
 			}
-			insertSQLStmt := `
-				INSERT INTO "public"."menu"
-				(item)
-				VALUES ` + fmt.Sprintf("%+v", s)
-			_, err = database.DbConn.Query(insertSQLStmt)
 			w.WriteHeader(http.StatusCreated)
 		default:
 			topping, err := json.Marshal(toppings)

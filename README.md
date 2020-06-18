@@ -8,10 +8,11 @@ In this project I'm trying to build a Donut store by impementing REST API.
 
 ## BEHAVIOUR
 
-1. Any User should be able to list all available toppings at /api/toppings
-2. Any User should be able get the name of the donut and its cost at /api/topping/{TOPPING_NAME}
-   - if the topping name isn't available in the menu, user shall receive with a HTTP 404 Response.
-3. Any User should be able to POST a new menu item in a valid JSON format. See example below.
+1. Any User should be able to list all available toppings at `/api/toppings`
+2. Any User should be able to get the name of the donut and its cost at `/api/topping/{TOPPING_NAME}`
+   - if the topping name isn't available in the menu, user shall receive with a `HTTP 404 Status`.
+3. Any User should be able to POST a new menu item in a valid JSON format at `/api/toppings`. See example below.
+   - A successful HTTP POST shall respond with `HTTP 201 Status`.
 
 ```
 {

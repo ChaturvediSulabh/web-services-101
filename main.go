@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 	"web-services-101/database"
@@ -31,10 +32,13 @@ type ToppingResponse struct {
 }
 
 func main() {
+	port := flag.String("PORT", "5000", "PORT to be used to run the application")
+	flag.Parse()
+	addr := ":" + *port
 	database.SetupDB()
 	const apibasePath = "/api"
 	topping.SetupRoutes(apibasePath)
-	err := http.ListenAndServe(":5000", nil)
+	err := http.ListenAndServe(addr, nil)
 	if err != nil {
 		log.Fatal(err)
 	}

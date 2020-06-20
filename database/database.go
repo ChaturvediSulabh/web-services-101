@@ -3,17 +3,21 @@ package database
 import (
 	"context"
 	"database/sql"
+	"flag"
 	"log"
-	"os"
 	"time"
 )
 
 //DbConn ...
 var DbConn *sql.DB
 
+//ConnStr ...
+var ConnStr = flag.String("DB_CONN_STR", "", "POSTGRES: Database connection string")
+
 //SetupDB ...
 func SetupDB() *sql.DB {
-	DbConn, err := sql.Open("postgres", os.Getenv("CONN_STR"))
+	flag.Parse()
+	DbConn, err := sql.Open("postgres", *ConnStr)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -9,7 +9,7 @@ pipeline {
     stage('Docker Build and Push'){
       steps {
         sh '''
-        docker build -t go-web-services-101 .
+        docker build -t chaturvedisulabh/go-web-services-101:latest .
         docker push chaturvedisulabh/go-web-services-101:latest
         '''
       }

@@ -53,5 +53,5 @@ In this project I'm trying to build a Donut store by implementing REST API.
 
 ### Configurable parameters
 
-PORT = <YOUR_HOST_PORT> [update `docker run -p` param accordingly]
-DB_CONN_STR = <POSTGRES_DB_CONNECTION_STRING>
+- PORT = <YOUR_HOST_PORT> [update `docker run -p` param accordingly]
+- DB_CONN_STR = <POSTGRES_DB_CONNECTION_STRING>

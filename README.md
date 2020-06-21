@@ -6,6 +6,12 @@ This repo is part of my committment to code more and learn/imporve at Go/My prog
 
 In this project I'm trying to build a Donut store by implementing REST API.
 
+### DEV STAGES
+
+- Pass Data as JSON File
+- Implement Data Persistence : Use PostGres DB
+- Refractor Use Advance Go techniques sunc as context.
+
 ## BEHAVIOUR
 
 1. Any User should be able to list all available toppings at `/api/toppings`
@@ -40,3 +46,12 @@ In this project I'm trying to build a Donut store by implementing REST API.
 			]
 		}
 ```
+
+## USAGE
+
+`docker run -d --name go-web-services-101 -p 5000:5000 chaturvedisulabh/go-web-services-101:latest -PORT=5000 -DB_CONN_STR=$DB_CONN_STR`
+
+### Configurable parameters
+
+PORT = <YOUR_HOST_PORT> [update `docker run -p` param accordingly]
+DB_CONN_STR = <POSTGRES_DB_CONNECTION_STRING>

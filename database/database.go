@@ -6,6 +6,8 @@ import (
 	"flag"
 	"log"
 	"time"
+
+	_ "github.com/lib/pq"
 )
 
 //DbConn ...

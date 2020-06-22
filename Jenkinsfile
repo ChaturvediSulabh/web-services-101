@@ -6,23 +6,22 @@ pipeline {
         echo "BRANCH: {$GIT_BRANCH}"
       }
     }
-    stage('Docker Build'){
+    stage('Build and Push'){
       steps {
         withCredentials([string(credentialsId: 'DB_CONN_STR', variable: 'DB_CONN_STR')]) {
-          sh '''
-          docker build -t chaturvedisulabh/go-web-services-101:latest .  --build-arg DB_CONN_STR=$DB_CONN_STR
-          '''
+          script {
+            docker.withRegistry('','DockerHub'){
+              def image = docker.build('chaturvedisulabh/go-web-services-101:${env.BUILD_ID}', '--build-arg -DB_CONN_STR=$DB_CONN_STR')
+              image.push()
+            }
+          }
         }
       }
     }
-    stage('Docker Run'){
+    stage('Run'){
       steps {
         withCredentials([string(credentialsId: 'DB_CONN_STR', variable: 'DB_CONN_STR')]) {
-          sh '''
-            docker stop go-web-services-101
-            docker rm go-web-services-101
-            docker run -d --name go-web-services-101 -p 5000:5000 chaturvedisulabh/go-web-services-101:latest -PORT=5000 -DB_CONN_STR=$DB_CONN_STR
-          '''
+          docker.image('chaturvedisulabh/go-web-services-101:${env.BUILD_ID}').withRun('--name go-web-services-101 -p 5000:5000 -PORT=5000 -DB_CONN_STR=$DB_CONN_STR')
         }
       }
     }

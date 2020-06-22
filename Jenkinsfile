@@ -8,9 +8,11 @@ pipeline {
     }
     stage('Docker Build'){
       steps {
-        sh '''
-        docker build -t chaturvedisulabh/go-web-services-101:latest .
-        '''
+        withCredentials([string(credentialsId: 'DB_CONN_STR', variable: 'DB_CONN_STR')]) {
+          sh '''
+          docker build -t chaturvedisulabh/go-web-services-101:latest .  --build-arg DB_CONN_STR=$DB_CONN_STR
+          '''
+        }
       }
     }
     stage('Docker Run'){

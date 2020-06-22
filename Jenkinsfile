@@ -17,6 +17,8 @@ pipeline {
       steps {
         withCredentials([string(credentialsId: 'DB_CONN_STR', variable: 'DB_CONN_STR')]) {
           sh '''
+            docker stop go-web-services-101
+            docker rm go-web-services-101
             docker run -d --name go-web-services-101 -p 5000:5000 chaturvedisulabh/go-web-services-101:latest -PORT=5000 -DB_CONN_STR=$DB_CONN_STR
           '''
         }

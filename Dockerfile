@@ -24,4 +24,4 @@ COPY go.sum .
 RUN go mod download
 RUN go build -o donutStoreAPI
 ENTRYPOINT ["./donutStoreAPI"]
-CMD ["-PORT=5000", "--DB_CONN_STR=''"]
+CMD ["-PORT=5000", "-DB_CONN_STR=''"]

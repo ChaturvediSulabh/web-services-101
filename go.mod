@@ -2,8 +2,4 @@ module web-services-101
 
 go 1.14
 
-require (
-	github.com/lib/pq v1.7.0
-	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
-	golang.org/x/tools v0.0.0-20200619210111-0f592d2728bb // indirect
-)
+require github.com/lib/pq v1.7.0

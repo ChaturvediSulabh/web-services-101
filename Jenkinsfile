@@ -13,16 +13,6 @@ pipeline {
         '''
       }
     }
-    stage('Test'){
-        steps {
-          echo 'go version'
-          withCredentials([string(credentialsId: 'DB_CONN_STR', variable: 'DB_CONN_STR')]) {
-            sh '''
-            go test ./... -DB_CONN_STR=$DB_CONN_STR
-            '''
-          }
-       }
-    }
     stage('Docker Run'){
       steps {
         withCredentials([string(credentialsId: 'DB_CONN_STR', variable: 'DB_CONN_STR')]) {

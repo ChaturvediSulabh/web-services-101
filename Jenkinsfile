@@ -20,6 +20,7 @@ pipeline {
             sh '''
             go test ./... -DB_CONN_STR=$DB_CONN_STR
             '''
+          }
        }
     }
     stage('Docker Run'){
